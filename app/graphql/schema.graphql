@@ -1,0 +1,17 @@
+schema {
+    query: Query
+}
+
+type Query {
+    users: [User!]!
+}
+
+type User {
+    id: Int!
+    posts: [Post!]
+}
+
+type Post {
+    id: Int!
+    text: String!
+}
