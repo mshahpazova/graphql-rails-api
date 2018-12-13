@@ -11,7 +11,7 @@ gem 'sqlite3'
 gem 'puma', '~> 3.11'
 gem 'graphql'
 gem 'graphiql-rails', '~> 1.4', '>= 1.4.8'
-gem 'graphql-preload'
+gem 'graphql-preload','>= 2.1.0'
 gem 'graphql-batch'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'

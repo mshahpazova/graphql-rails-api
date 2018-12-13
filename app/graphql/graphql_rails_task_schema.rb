@@ -1,47 +1,16 @@
 # frozen_string_literal: true
+  include GraphQL::Preload::SchemaMethods
+  require Rails.root.join('app/graphql/field_resolvers')
+  graphql_path = Rails.root.join('app/graphql/schema.graphql')
+  graphql_schema = File.read(graphql_path)
+  hash = FieldResolvers.instance
+  GraphqlRailsTaskSchema = GraphQL::Schema.from_definition(graphql_schema, default_resolve: hash)
 
-# graphqlschema = Rails.root.join('app/graphql/schema.graphql')
-
-module ExecuteGraphQLByConvention
-  module_function
-
-  # Find a Ruby module corresponding to `type`,
-  # then call its method corresponding to `field`.
-  def call(type, field, obj, args, ctx)
-    # use GraphQL::Batch
-    type_module = Object.const_get(type.name)
-    type_module.public_send(field.name, obj, args, ctx)
+  GraphqlRailsTaskSchema.redefine do
+    enable_preloading
+    use GraphQL::Batch
   end
-end
 
-type_hash = {
-  'Query' => {
-    'users' => ->(_ob, _args, _ctx) { User.all }
-  },
-  'Post' => {
-    'title' => ->(obj, _args, _ctx) { obj.title },
-    'body' => ->(obj, _args, _ctx) { obj.body }
-  },
-
-  'User' => {
-    'posts' => ->(obj, _args, _ctx) { obj.posts }
-  }
-}
-
-GraphqlRailsTaskSchema = GraphQL::Schema.from_definition(
-  'schema {
-  query: Query
-}
-type Query {
-  users: [User!]!
-}
-
-type User {
-  id: Int!
-  posts: [Post!]
-}
-
-type Post {
-  id: Int!
-  text: String!
-}', default_resolve: type_hash)
+  GraphqlRailsTaskSchema.types['User'].redefine do
+    preload :posts
+  end
