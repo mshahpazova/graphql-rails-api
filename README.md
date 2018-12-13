@@ -1,24 +1,34 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is an API project that uses rails and graphql
 
-Things you may want to cover:
+### Starting the application
+* Run bundle install to install the dependencies
 
-* Ruby version
+* Database creation: rails db:create
+* Seed data rake db:seed
 
-* System dependencies
+* to run the server use:
+rails s
 
-* Configuration
+### Using the application
 
-* Database creation
+* A request to see the users and their posts can be done at the following endpoint:
+[http://localhost:3000/graphql?query={users{posts{text}}}
+](http://localhost:3000/graphql?query={users{posts{text}}})
 
-* Database initialization
 
-* How to run the test suite
+* or through the graphical interactive in-browser GraphQL IDE
+at: 
+[http://localhost:3000/graphiql](http://localhost:3000/graphiql)
 
-* Services (job queues, cache servers, search engines, etc.)
+### Required Versions
 
-* Deployment instructions
+* Ruby version: 2.5.0
+* Rails version: 2.5.0
 
-* ...
+* Gems that are used:
+  * graphql
+  * 'graphiql-rails'
+  * graphql-batch
+  * graphql-preload
